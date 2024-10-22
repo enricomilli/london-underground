@@ -24,11 +24,13 @@ def read_excel_with_byte_reader(filename):
             # byte == 10 is the row separator
             elif byte == 10:
                 if current_cell:
-                    # append to current row and cut off the newline char
+                # append to current cell before marking this row as complete
                     current_row.append(current_cell)
+
                 if current_row:
-                    # split the string and append the list
+                # append new row to the data as a list
                     data.append(current_row[0].split(","))
+
                 # reset vars
                 current_cell = ""
                 current_row = []
