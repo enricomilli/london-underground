@@ -1,5 +1,16 @@
-from reading_file import get_row_type
 from constants import STATION_LIST_ENTRY, STATION_TRAVEL_TIME_ENTRY
+
+def get_row_type(row):
+    to_station = row[2]
+
+    if type(to_station) is str:
+        return STATION_TRAVEL_TIME_ENTRY
+    if type(to_station) is float:
+        return STATION_LIST_ENTRY
+    else:
+        print("this row was not read correctly:", row)
+        return NotImplemented
+
 
 def get_all_stations(lines_data):
     total = set()
@@ -34,6 +45,7 @@ def format_underground_data(underground_data):
         if row_type == STATION_LIST_ENTRY:
             station_name = row[1]
             line_name = row[0]
+
 
             if lines_data.get(line_name):
                 lines_data[line_name]["stations"].append(station_name)

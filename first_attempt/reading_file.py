@@ -57,13 +57,11 @@ def read_excel_with_byte_reader(filename):
 
 
 def get_row_type(row):
-    str_num_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "14", "16"]
-    travel_time = row[3]
     to_station = row[2]
 
-    if travel_time:
+    if type(to_station) is str:
         return STATION_TRAVEL_TIME_ENTRY
-    if not to_station:
+    if type(to_station) is float:
         return STATION_LIST_ENTRY
     else:
         print("this row was not read correctly:", row)
