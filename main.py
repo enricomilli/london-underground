@@ -20,10 +20,14 @@ for edge in all_connections:
         travel_time = edge[2]
         underground_graph.insert_edge(from_station_index, to_station_index, travel_time)
     except RuntimeError:
-        print('already added this edge:', edge)
+        # print('already added this edge:', edge)
         pass
 
 
 # Kruskals algorithm
 minimum_spanning_tree = kruskal(underground_graph)
-print(minimum_spanning_tree)
+edge_list = minimum_spanning_tree.get_edge_list()
+
+# minimun spanning tree with stations
+for edge in edge_list:
+    print(all_stations[edge[0]], "to", all_stations[edge[1]])
