@@ -18,7 +18,7 @@ def get_test_pairs(n_stations, n_pairs=30):
 
 def find_path(G, start, end):
     # Run Dijkstra's algorithm from start station
-    minutes, predecessors = dijkstra(G, start)
+    weight, predecessors = dijkstra(G, start)
 
     # Reconstruct the path from end to start using predecessors
     path = []
@@ -33,4 +33,4 @@ def find_path(G, start, end):
         path.append(current)
         current = predecessors[current]
 
-    return path, minutes[end]
+    return path, weight[end]
