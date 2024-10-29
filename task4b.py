@@ -60,7 +60,3 @@ plt.xlabel('Duration (Minutes)')
 plt.ylabel('Frequency')
 plt.grid(True, alpha=0.3)
 plt.show()
-
-# Print some statistical information
-print(f"Total number of journeys plotted: {len(journey_times)}")
-print(f"Average journey time: {sum(journey_times)/len(journey_times):.2f} minutes")
