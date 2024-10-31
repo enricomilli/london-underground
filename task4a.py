@@ -28,7 +28,9 @@ for edge in all_connections:
 minimum_spanning_tree = kruskal(underground_graph)
 edge_list = minimum_spanning_tree.get_edge_list()
 
-# minimun spanning tree with stations
 # TODO: Select an appropriate algorithm for this task and use the corresponding library code. List the affected routes by naming the adjacent stations of each closed line section; for example, if the line section between adjacent stations Piccadilly Circus and Green Park is to be closed (but journeys between any two stations would still be possible), specify it as "Piccadilly Circus -- Green Park"
+output = ""
+
 for edge in edge_list:
-    print(all_stations[edge[0]], "to", all_stations[edge[1]])
+
+    print(all_stations[edge[0]], "--", all_stations[edge[1]], end=", ")

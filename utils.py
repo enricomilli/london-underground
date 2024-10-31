@@ -43,8 +43,8 @@ def format_underground_data(underground_data):
         row_type = get_row_type(row)
 
         if row_type == STATION_LIST_ENTRY:
-            station_name = row[1]
-            line_name = row[0]
+            station_name = row[1].strip()
+            line_name = row[0].strip()
 
 
             if lines_data.get(line_name):
@@ -53,9 +53,9 @@ def format_underground_data(underground_data):
                 lines_data[line_name] = {"stations": [station_name], "connections": []}
 
         elif row_type == STATION_TRAVEL_TIME_ENTRY:
-            line_name = row[0]
-            from_station = row[1]
-            to_station = row[2]
+            line_name = row[0].strip()
+            from_station = row[1].strip()
+            to_station = row[2].strip()
             travel_time = row[3]
 
             lines_data[line_name]["connections"].append(
