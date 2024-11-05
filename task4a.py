@@ -4,15 +4,22 @@ from read_file import get_underground_data
 from utils import format_underground_data, get_all_stations, get_all_connections
 from mst import kruskal
 
+# Use pandas to import the excel file
 underground_data = get_underground_data(UNDERGROUND_DATA_FILE)
 
+# format the data into a usable data structure
 formated_data = format_underground_data(underground_data)
 
+# get a list of all stations
 all_stations = get_all_stations(formated_data)
+
+# get a list of all the edges
 all_connections = get_all_connections(formated_data)
 
+# create a adjacency list graph
 underground_graph = AdjacencyListGraph(len(all_stations), False, True)
 
+# add the edges to the adjacency list graph
 for edge in all_connections:
     try:
         from_station_index = all_stations.index(edge[0])
@@ -20,17 +27,14 @@ for edge in all_connections:
         travel_time = edge[2]
         underground_graph.insert_edge(from_station_index, to_station_index, travel_time)
     except RuntimeError:
-        # print('already added this edge:', edge)
+        # Catch any repeated edges and continue
         pass
 
 
-# Kruskals algorithm
+# Kruskals algorithm to create the reduced service
 minimum_spanning_tree = kruskal(underground_graph)
 edge_list = minimum_spanning_tree.get_edge_list()
 
-# TODO: Select an appropriate algorithm for this task and use the corresponding library code. List the affected routes by naming the adjacent stations of each closed line section; for example, if the line section between adjacent stations Piccadilly Circus and Green Park is to be closed (but journeys between any two stations would still be possible), specify it as "Piccadilly Circus -- Green Park"
-output = ""
-
+# Report the affected stops
 for edge in edge_list:
-
     print(all_stations[edge[0]], "--", all_stations[edge[1]], end=", ")

@@ -1,36 +1,41 @@
 from adjacency_list_graph import AdjacencyListGraph
-from task1b_utils import find_path
 from constants import UNDERGROUND_DATA_FILE
 from read_file import get_underground_data
-from utils import format_underground_data, get_all_stations, get_all_connections
-from mst import kruskal
+from task1b_utils import find_path
 from task4b_utils import create_path_string
+from utils import format_underground_data, get_all_stations, get_all_connections
 import matplotlib.pyplot as plt
 
+# Use pandas to import the excel file
 underground_data = get_underground_data(UNDERGROUND_DATA_FILE)
 
+# format the data into a usable data structure
 formated_data = format_underground_data(underground_data)
 
+# get a list of all stations
 all_stations = get_all_stations(formated_data)
+
+# get a list of all edges
 all_connections = get_all_connections(formated_data)
 
-underground_graph = AdjacencyListGraph(len(all_stations), directed=False, weighted=True)
+# create a adjacency list graph
+underground_graph = AdjacencyListGraph(len(all_stations), False, True)
 
+# add the edges to the adjacency list graph
 for edge in all_connections:
     try:
         from_station_index = all_stations.index(edge[0])
         to_station_index = all_stations.index(edge[1])
-        travel_time = edge[2]
-        underground_graph.insert_edge(from_station_index, to_station_index, travel_time)
+        # weight of 1 to represent 1 stop / 1 station
+        weight = 1
+        underground_graph.insert_edge(from_station_index, to_station_index, weight)
     except RuntimeError:
-        # print('already added this edge:', edge)
+        # Catch any repeated edges and continue
         pass
 
 
-# Kruskals algorithm
-minimum_spanning_tree = kruskal(underground_graph)
 longest_journey = {
-    "minutes": 0,
+    "stations": 0,
     "path": []
 }
 journey_times = []
@@ -41,22 +46,24 @@ for station in all_stations:
         if station == to_station:
             continue
 
-        path, total_minutes = find_path(minimum_spanning_tree, all_stations.index(station), all_stations.index(to_station))
-        if total_minutes > longest_journey["minutes"]:
+        path, total_stops = find_path(underground_graph, all_stations.index(station), all_stations.index(to_station))
+
+        # finding the longest path
+        if total_stops > longest_journey["stations"]:
             longest_journey = {
-                "minutes": total_minutes,
+                "stations": total_stops,
                 "path": path
             }
-        journey_times.append(total_minutes)
+        journey_times.append(total_stops)
 
-print(f'the longest journey is {longest_journey["minutes"]} minutes long.')
+print(f'the longest journey is {longest_journey["stations"]} stops long.')
 print("here is the journey:", create_path_string(all_stations, longest_journey["path"]))
 
 # Create the histogram
 plt.figure(figsize=(10, 6))
 plt.hist(journey_times, bins=30, edgecolor='black')
-plt.title('Distribution of London Underground Journey Durations')
-plt.xlabel('Duration (Minutes)')
+plt.title('Distribution of London Underground Journey Durations In Stops')
+plt.xlabel('Number Of Stops')
 plt.ylabel('Frequency')
 plt.grid(True, alpha=0.3)
 plt.show()
