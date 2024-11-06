@@ -1,7 +1,8 @@
 from adjacency_list_graph import AdjacencyListGraph
 from constants import UNDERGROUND_DATA_FILE
+from dijkstra import dijkstra
 from read_file import get_underground_data
-from task1b_utils import find_path
+from task1b_utils import find_path_to_end
 from task4b_utils import create_path_string
 from utils import format_underground_data, get_all_stations, get_all_connections
 import matplotlib.pyplot as plt
@@ -42,11 +43,16 @@ journey_times = []
 
 # calculate all the possible journeys from every station
 for station in all_stations:
+
+    # use dijkstras and create source node
+    distances, predecessors = dijkstra(underground_graph, all_stations.index(station))
+
     for to_station in all_stations:
         if station == to_station:
             continue
 
-        path, total_stops = find_path(underground_graph, all_stations.index(station), all_stations.index(to_station))
+        # find the path to the destination node
+        path, total_stops = find_path_to_end(distances, predecessors, all_stations.index(to_station))
 
         # finding the longest path
         if total_stops > longest_journey["stations"]:

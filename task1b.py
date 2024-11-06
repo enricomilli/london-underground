@@ -9,19 +9,24 @@ execution_times = []
 
 # Test algorithm with different network sizes
 for network_size in sizes:
-    # start timer
-    start = time.time()
 
-    graph = generate_random_graph(network_size, 0.5, True, False, True, 0, 10)
+    graph = generate_random_graph(network_size, 0.3, True, False, True, 0, 10)
 
     pairs = get_test_pairs(network_size, 30)
+
+    start = time.time()
 
     for pair in pairs:
         path, total_distance = find_path(graph, pair[0], pair[1])
 
-    # completed algorithm, append the results
+    # execution time for all the pairs
     execution_time = time.time() - start
-    execution_times.append(execution_time)
+
+    # divide to get an avg execution time per pair
+    avg_execution_time = execution_time / 30
+
+    # append the avg exec time
+    execution_times.append(avg_execution_time)
 
 # Create the plot
 plt.figure(figsize=(10, 6))
@@ -29,17 +34,23 @@ plt.figure(figsize=(10, 6))
 # Plot empirical data
 plt.plot(sizes, execution_times, label='Empirical Time')
 
-# Calculate theoretical O(n²) values: size of network^2
 theoretical = np.array(sizes)**2
 
-# Calculate scaling factor to normalize the data
+# theoretical_exec_times = []
+# for network_size in sizes:
+#     # Expected number of edges with 0.5 probability
+#     expected_edges = (network_size * (network_size - 1)) / 4
+
+#     # Time complexity: O((E + V)log V)
+#     theoretical_time = (expected_edges + network_size) * np.log(network_size)
+
+#     theoretical_exec_times.append(theoretical_time)
+
 scaling_factor = np.mean(execution_times) / np.mean(theoretical)
 
-# Apply normalization
 theoretical = theoretical * scaling_factor
 
-# Plot theoretical O(n^2) complexity
-plt.plot(sizes, theoretical, label='Theoretical O(n²)')
+plt.plot(sizes, theoretical, label='Theoretical O(n^2)')
 
 # Add labels
 plt.xlabel('Network Size (n)')
