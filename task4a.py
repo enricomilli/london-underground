@@ -1,6 +1,7 @@
 from adjacency_list_graph import AdjacencyListGraph
 from constants import UNDERGROUND_DATA_FILE
 from read_file import get_underground_data
+from task4a_test import test_connection_between_all_stations
 from utils import format_underground_data, get_all_stations, get_all_connections
 from mst import kruskal
 
@@ -32,7 +33,15 @@ for edge in all_connections:
 
 
 # Kruskals algorithm to create the reduced service
+# This how we determined which lines to close
 minimum_spanning_tree = kruskal(underground_graph)
+
+response, failed_cases = test_connection_between_all_stations(minimum_spanning_tree, all_stations)
+if response is False:
+    print("test was failed here are the test cases", failed_cases)
+
+
+# get a list of all connections
 edge_list = minimum_spanning_tree.get_edge_list()
 
 # Report the affected stops
